@@ -7,9 +7,8 @@ Description-
 	c) I multiplied the new matrix with the eyedirection vector to get the new position of the camera
 	d) Similarly, I calculated the new postion of the camera for the backward movement using positive value in z axis 
 2) Camera Pan left and right
-	a) Camera should be stable at the given position
-	b) We need to turn camera on x axis for the left or right direction
-	c) To get the new positon of the camera for the left panning I used translate function to get the new matrix with negative value in x axis
-	d) I multiplied the new matrix with the eyedirection vector to get the new position of the camera
-	e) Similarly, I calculated the new postion of the camera for the right panning with positive value in x axis
+	a) We need to turn camera on x axis for the left or right direction
+	b) To get the new positon of the camera for the left panning I used translate function to get the new matrix with negative value in x axis
+	c) I multiplied the new matrix with the centerposition vector to get the new position of the camera
+	d) Similarly, I calculated the new postion of the camera for the right panning with positive value in x axis
 
