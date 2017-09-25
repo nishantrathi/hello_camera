@@ -240,16 +240,16 @@ public:
 
   void panCameraLeft( ){
     glm::mat4 newMatrix = glm::translate(glm::mat4(), glm::vec3(-0.05f, 0.0f, 0.0f));
-    glm::vec4 newEye = newMatrix * glm::vec4(eyePosition,1.0);
+    glm::vec4 newEye = newMatrix * glm::vec4(centerPosition,1.0);
     glm::vec3 newEye3(newEye);
-    eyePosition = newEye3;    
+    centerPosition = newEye3;    
   }
 
   void panCameraRight( ){
     glm::mat4 newMatrix = glm::translate(glm::mat4(), glm::vec3(0.05f, 0.0f, 0.0f));
-    glm::vec4 newEye = newMatrix * glm::vec4(eyePosition,1.0);
+    glm::vec4 newEye = newMatrix * glm::vec4(centerPosition,1.0);
     glm::vec3 newEye3(newEye);
-    eyePosition = newEye3;    
+    centerPosition = newEye3;    
   }
 
   bool begin( ){
