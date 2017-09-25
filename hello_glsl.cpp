@@ -173,12 +173,26 @@ public:
     
   void rotateCameraLeft( ){
     glm::vec3 f = glm::normalize(-eyePosition);
+    printf("eye position 1%f\n",f[0] );
+    printf("eye position 2%f\n",f[1] );
+    printf("eye position 3%f\n",f[2] );
+
     glm::vec3 _up = glm::normalize(upVector);
+    printf("up vector - %f\n",_up[0] );
+    printf("up vector - %f\n",_up[1] );
+    printf("up vector - %f\n",_up[2] );
     glm::vec3 s = glm::normalize(glm::cross(f, _up));
+     printf("s - %f\n",s[0] );
+    printf("s - %f\n",s[1] );
+    printf("s - %f\n",s[2] );
     glm::vec3 u = glm::cross(s, f);
     glm::mat3 m = glm::rotate(rotationDelta, u);
     eyePosition = m * eyePosition;
+    printf("eyePosition final - %f\n",eyePosition[0]);
+    printf("eyePosition final - %f\n",eyePosition[1]);
+    printf("eyePosition final - %f\n",eyePosition[2]);
   }
+
 
   void rotateCameraRight( ){
     glm::vec3 f = glm::normalize(-eyePosition);
@@ -209,6 +223,34 @@ public:
     eyePosition = m * eyePosition;
   }
 
+  void moveCameraForward( ){
+    glm::mat4 newMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -0.05f));
+    glm::vec4 newEye = newMatrix * glm::vec4(eyePosition,1.0);
+    glm::vec3 newEye3(newEye);
+    eyePosition = newEye3;    
+  }
+
+
+  void moveCameraBackward( ){
+    glm::mat4 newMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.05f));
+    glm::vec4 newEye = newMatrix * glm::vec4(eyePosition,1.0);
+    glm::vec3 newEye3(newEye);
+    eyePosition = newEye3;    
+  }
+
+  void panCameraLeft( ){
+    glm::mat4 newMatrix = glm::translate(glm::mat4(), glm::vec3(-0.05f, 0.0f, 0.0f));
+    glm::vec4 newEye = newMatrix * glm::vec4(eyePosition,1.0);
+    glm::vec3 newEye3(newEye);
+    eyePosition = newEye3;    
+  }
+
+  void panCameraRight( ){
+    glm::mat4 newMatrix = glm::translate(glm::mat4(), glm::vec3(0.05f, 0.0f, 0.0f));
+    glm::vec4 newEye = newMatrix * glm::vec4(eyePosition,1.0);
+    glm::vec3 newEye3(newEye);
+    eyePosition = newEye3;    
+  }
 
   bool begin( ){
     msglError( );
@@ -340,6 +382,14 @@ public:
       light0.toggle( );
     }else if(isKeyPressed('2')){
       light1.toggle( );
+    }else if(isKeyPressed('O')){
+      moveCameraForward();
+    }else if (isKeyPressed('L')){
+      moveCameraBackward();
+    }else if (isKeyPressed('K')){
+      panCameraLeft();
+    }else if (isKeyPressed(';')){
+      panCameraRight();
     }
     return !msglError( );
   }
