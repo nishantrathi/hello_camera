@@ -17,6 +17,7 @@
 #include "GLFWApp.h"
 #include "GLSLShader.h"
 #include "glut_teapot.h"
+#include "camera.cpp"
 
 void msglVersion(void){
   fprintf(stderr, "OpenGL Version Information:\n");
@@ -173,24 +174,12 @@ public:
     
   void rotateCameraLeft( ){
     glm::vec3 f = glm::normalize(-eyePosition);
-    printf("eye position 1%f\n",f[0] );
-    printf("eye position 2%f\n",f[1] );
-    printf("eye position 3%f\n",f[2] );
-
     glm::vec3 _up = glm::normalize(upVector);
-    printf("up vector - %f\n",_up[0] );
-    printf("up vector - %f\n",_up[1] );
-    printf("up vector - %f\n",_up[2] );
     glm::vec3 s = glm::normalize(glm::cross(f, _up));
-     printf("s - %f\n",s[0] );
-    printf("s - %f\n",s[1] );
-    printf("s - %f\n",s[2] );
     glm::vec3 u = glm::cross(s, f);
     glm::mat3 m = glm::rotate(rotationDelta, u);
     eyePosition = m * eyePosition;
-    printf("eyePosition final - %f\n",eyePosition[0]);
-    printf("eyePosition final - %f\n",eyePosition[1]);
-    printf("eyePosition final - %f\n",eyePosition[2]);
+
   }
 
 
@@ -224,32 +213,44 @@ public:
   }
 
   void moveCameraForward( ){
-    glm::mat4 newMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -0.05f));
-    glm::vec4 newEye = newMatrix * glm::vec4(eyePosition,1.0);
-    glm::vec3 newEye3(newEye);
-    eyePosition = newEye3;    
+    //glm::mat4 newMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -0.05f));
+    //glm::vec4 newEye = newMatrix * glm::vec4(eyePosition,1.0);
+    //glm::vec3 newEye3(newEye);
+
+    glm::vec3 gaze = glm::normalize(centerPosition - eyePosition);
+    glm::vec3 newEye = eyePosition+gaze;    
+    eyePosition = newEye;    
   }
 
 
   void moveCameraBackward( ){
-    glm::mat4 newMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.05f));
-    glm::vec4 newEye = newMatrix * glm::vec4(eyePosition,1.0);
-    glm::vec3 newEye3(newEye);
-    eyePosition = newEye3;    
+    //glm::mat4 newMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.05f));
+    //glm::vec4 newEye = newMatrix * glm::vec4(eyePosition,1.0);
+    //glm::vec3 newEye3(newEye);
+    //eyePosition = newEye3;    
+
+    glm::vec3 gaze = glm::normalize(centerPosition - eyePosition);
+    glm::vec3 newEye = eyePosition-gaze;    
+    eyePosition = newEye;
   }
 
   void panCameraLeft( ){
-    glm::mat4 newMatrix = glm::translate(glm::mat4(), glm::vec3(-0.05f, 0.0f, 0.0f));
-    glm::vec4 newEye = newMatrix * glm::vec4(centerPosition,1.0);
-    glm::vec3 newEye3(newEye);
-    centerPosition = newEye3;    
+    //glm::mat4 newMatrix = glm::translate(glm::mat4(), glm::vec3(-0.05f, 0.0f, 0.0f));
+    //glm::vec4 newEye = newMatrix * glm::vec4(centerPosition,1.0);
+    //glm::vec3 newEye3(newEye);
+    //centerPosition = newEye3;
+
+    glm::vec3 la = centerPosition - eyePosition;
+    glm::mat3 m = glm::rotate(-rotationDelta, glm::normalize(upVector));
+    la = m*la;
+    centerPosition = la+eyePosition;
   }
 
   void panCameraRight( ){
-    glm::mat4 newMatrix = glm::translate(glm::mat4(), glm::vec3(0.05f, 0.0f, 0.0f));
-    glm::vec4 newEye = newMatrix * glm::vec4(centerPosition,1.0);
-    glm::vec3 newEye3(newEye);
-    centerPosition = newEye3;    
+    glm::vec3 la = centerPosition - eyePosition;
+    glm::mat3 m = glm::rotate(rotationDelta, glm::normalize(upVector));
+    la = m*la;
+    centerPosition = la+eyePosition;    
   }
 
   bool begin( ){
@@ -348,7 +349,8 @@ public:
       initEyePosition( );
       initUpVector( );
       initRotationDelta( );
-      initLights( );  
+      initLights( ); 
+      initCenterPosition(); 
       printf("Eye position, up vector and rotation delta reset.\n");
     }else if(isKeyPressed(GLFW_KEY_LEFT)){
       rotateCameraRight( );

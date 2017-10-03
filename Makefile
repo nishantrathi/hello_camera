@@ -25,7 +25,7 @@ endif
 
 TARGET = hello_glsl
 # C++ Files
-CXXFILES =   hello_glsl.cpp glut_teapot.cpp
+CXXFILES =   hello_glsl.cpp glut_teapot.cpp camera.cpp
 CFILES =  
 # Headers
 HEADERS =  GLFWApp.h GLSLShader.h glut_teapot.h
